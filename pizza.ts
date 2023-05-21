@@ -2,10 +2,16 @@ async function createDAODrop() {
     const path = require("path");
 const homedir = require("os").homedir();
 
-const { KeyPair, keyStores, connect, Account } = require("near-api-js");
+// const { KeyPair, keyStores, connect } = require("near-api-js");
+const { UnencryptedFileSystemKeyStore } = require("@near-js/keystores-node");
 var assert = require('assert');
+const { Account } = require("@near-js/accounts");
+const { Near } = require("@near-js/wallet-account");
+
+
 require('dotenv').config();
 let telegram_public_bot = process.env.TELEGRAM_KEYBOT;
+
 
 const keypom = require("@keypom/core");
 // const { DEV_CONTRACT } = require("./configurations");
@@ -32,7 +38,8 @@ const { parseNearAmount } = require("@near-js/utils");
 console.log(`The number of keys to generate is: ${numberOfKeys}.`);
 const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot(telegram_public_bot, { polling: false });
-
+const CREDENTIALS_DIR = ".near-credentials";     // Initiate connection to the NEAR blockchain.
+const credentialsPath =  path.join(homedir, CREDENTIALS_DIR);
 
 const {
 	initKeypom,
@@ -44,15 +51,14 @@ const {
 } = keypom
 
 // Change this to your account ID
-const FUNDER_ACCOUNT_ID = "rarepizzas.near"; // change to rare pizzas
 const NETWORK_ID = "mainnet";
+const FUNDER_ACCOUNT_ID = "rarepizzas.near"; // change to rare pizzas
 const roleName = "Onboardees";
 const DAO_CONTRACT = "onboarddao.sputnik-dao.near";
 const NFT_TOKEN_ID = "keypom-token-" + Date.now().toString();
-const CREDENTIALS_DIR = ".near-credentials";     // Initiate connection to the NEAR blockchain.
-const credentialsPath =  path.join(homedir, CREDENTIALS_DIR);
+
 const numberOfKeys1 = 1; // basically number of links to generate // change back
-let keyStore = new keyStores.UnencryptedFileSystemKeyStore(credentialsPath);  
+let keyStore = new UnencryptedFileSystemKeyStore(credentialsPath);  
 console.log("debug 1 line 66");
 let nearConfig = {
     networkId: NETWORK_ID,
@@ -64,7 +70,8 @@ let nearConfig = {
 };  
 
     
-let near = await connect(nearConfig);
+let near = new Near(nearConfig);
+
 const fundingAccount = new Account(near.connection, FUNDER_ACCOUNT_ID)
 // If a NEAR connection is not passed in and is not already running, initKeypom will create a new connection
 // Here we are connecting to the testnet network
@@ -87,22 +94,22 @@ let {keys, dropId} = await createDrop({
     fcData: {
         methods: [
             [
-                // {
-                //     receiverId: "nft-v2.keypom.near", // check if this
-                //     methodName: "nft_mint",
-                //     args: JSON.stringify({
-                //         // Change this token_id if it already exists -> check explorer transaction
-                //         token_id: NFT_TOKEN_ID,
-                //         metadata: {
-                //             title: "Global Pizza Day POAP 2023",
-                //             description: "PizzaDAO comes to North Africa. With this NFT you are automatically onboarded on-chain to North Africa DAO, Onboard DAO, and Pizza DAO on NEAR.",
-                //             media: "https://ipfs.near.social/ipfs/bafkreigjhig32jinjqeje4jva5ygki5345rfzhyg7vksbhlvwoiaw7ew3e",
-                //         }
-                //     }),
-                //     accountIdField: "receiver_id",
-                //     // Attached deposit of 1 $NEAR for when the receiver makes this function call
-                //     attachedDeposit: parseNearAmount("0.1")  // give less and see what happens
-                // },
+                {
+                    receiverId: "nft-v2.keypom.near", // check if this
+                    methodName: "nft_mint",
+                    args: JSON.stringify({
+                        // Change this token_id if it already exists -> check explorer transaction
+                        token_id: NFT_TOKEN_ID,
+                        metadata: {
+                            title: "Global Pizza Day POAP 2023",
+                            description: "PizzaDAO comes to North Africa. With this NFT you are automatically onboarded on-chain to North Africa DAO, Onboard DAO, and Pizza DAO on NEAR.",
+                            media: "https://ipfs.near.social/ipfs/bafkreigjhig32jinjqeje4jva5ygki5345rfzhyg7vksbhlvwoiaw7ew3e",
+                        }
+                    }),
+                    accountIdField: "receiver_id",
+                    // Attached deposit of 1 $NEAR for when the receiver makes this function call
+                    attachedDeposit: parseNearAmount("0.1")  // give less and see what happens
+                },
                 {
                     receiverId: DAO_CONTRACT,
                     methodName: "add_proposal",
@@ -122,47 +129,47 @@ let {keys, dropId} = await createDrop({
                     accountIdField: "proposal.kind.AddMemberToRole.member_id",
                     funderIdField: "funder",
                     attachedDeposit: parseNearAmount("0.01")
+                },
+                {
+                    receiverId: "africa.sputnik-dao.near",
+                    methodName: "add_proposal",
+                    args: JSON.stringify(
+                        {
+                            "proposal": {
+                            "description": "Welcome to North Africa Blockchain. Thanks for coming to Global Pizza Day Tangier 🍕🌍",
+                            "kind": {
+                                "AddMemberToRole": {
+                                "role": "members"
+
+                                }
+                            }
+                            }
+                        }
+                    ),
+                    accountIdField: "proposal.kind.AddMemberToRole.member_id",
+                    funderIdField: "funder",
+                    attachedDeposit: parseNearAmount("0.01")
+                },
+                {
+                    receiverId: "pizza.sputnik-dao.near",
+                    methodName: "add_proposal",
+                    args: JSON.stringify(
+                        {
+                            "proposal": {
+                            "description": "Welcome to Pizza DAO on NEAR. Thanks for coming to Global Pizza Day Tangier 🍕🌍",
+                            "kind": {
+                                "AddMemberToRole": {
+                                "role": "Pizza Trainee"
+
+                                }
+                            }
+                            }
+                        }
+                    ),
+                    accountIdField: "proposal.kind.AddMemberToRole.member_id",
+                    funderIdField: "funder",
+                    attachedDeposit: parseNearAmount("0.01")
                 }
-                // {
-                //     receiverId: "africa.sputnik-dao.near",
-                //     methodName: "add_proposal",
-                //     args: JSON.stringify(
-                //         {
-                //             "proposal": {
-                //             "description": "Welcome to North Africa Blockchain. Thanks for coming to Global Pizza Day Tangier 🍕🌍",
-                //             "kind": {
-                //                 "AddMemberToRole": {
-                //                 "role": "members"
-
-                //                 }
-                //             }
-                //             }
-                //         }
-                //     ),
-                //     accountIdField: "proposal.kind.AddMemberToRole.member_id",
-                //     funderIdField: "funder",
-                //     attachedDeposit: parseNearAmount("0.01")
-                // },
-                // {
-                //     receiverId: "pizza.sputnik-dao.near",
-                //     methodName: "add_proposal",
-                //     args: JSON.stringify(
-                //         {
-                //             "proposal": {
-                //             "description": "Welcome to Pizza DAO on NEAR. Thanks for coming to Global Pizza Day Tangier 🍕🌍",
-                //             "kind": {
-                //                 "AddMemberToRole": {
-                //                 "role": "Pizza Trainee"
-
-                //                 }
-                //             }
-                //             }
-                //         }
-                //     ),
-                //     accountIdField: "proposal.kind.AddMemberToRole.member_id",
-                //     funderIdField: "funder",
-                //     attachedDeposit: parseNearAmount("0.01")
-                // }
 
             ],
         ] 
