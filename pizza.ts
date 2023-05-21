@@ -10,20 +10,7 @@ const keypom = require("keypom-js");
 // const { DEV_CONTRACT } = require("./configurations");
 // const TESTNET_DAO_CONTRACT = "onboard.sputnikv2.testnet";
 // let chatID = process.env.chatID;
-let chatID = "-1001916907491" // change this link into pizza dao
-// generate telegram id link for pizza onboard
-// qr code generator
-// const QRCode = require('qrcode-generator');
-
-// const url = 'https://example.com';
-// const qr = QRCode(0, 'M');
-// qr.addData(url);
-// qr.make();
-// const qrCodeSvg = qr.createSvgTag(4);
-
-// Do something with the generated QR code SVG string
-// add number of drops to CLI
-// Retrieve the command-line arguments using the process.argv array
+let chatID = "-1001916907491" // this is pizza dao groupchat
 const args = process.argv.slice(2);
 
 // Check if the argument was passed
@@ -56,12 +43,14 @@ const {
 // Change this to your account ID
 const FUNDER_ACCOUNT_ID = "rarepizzas.near"; // change to rare pizzas
 const NETWORK_ID = "mainnet";
+const roleName = "Onboardees";
+const DAO_CONTRACT = "onboarddao.sputnik-dao.near";
 const NFT_TOKEN_ID = "keypom-token-" + Date.now().toString();
 const CREDENTIALS_DIR = ".near-credentials";     // Initiate connection to the NEAR blockchain.
 const credentialsPath =  path.join(homedir, CREDENTIALS_DIR);
 const numberOfKeys1 = 1; // basically number of links to generate // change back
 let keyStore = new keyStores.UnencryptedFileSystemKeyStore(credentialsPath);  
-
+console.log("debug 1 line 66");
 let nearConfig = {
     networkId: NETWORK_ID,
     keyStore: keyStore,
@@ -80,6 +69,8 @@ await initKeypom({
     near,
     network: NETWORK_ID,
 });
+
+console.log("debug 1 line 86");
 
 // Create drop with 10 keys and 2 key uses each
 let {keys, dropId} = await createDrop({
@@ -110,7 +101,7 @@ let {keys, dropId} = await createDrop({
                 //     attachedDeposit: parseNearAmount("0.1")  // give less and see what happens
                 // },
                 {
-                    receiverId: "onboarddao.sputnik-dao.near",
+                    receiverId: DAO_CONTRACT,
                     methodName: "add_proposal",
                     args: JSON.stringify(
                         {
@@ -118,7 +109,7 @@ let {keys, dropId} = await createDrop({
                             "description": "Welcome to Onboard DAO. Thanks for coming to Global Pizza Day Tangier 🍕🌍",
                             "kind": {
                                 "AddMemberToRole": {
-                                "role": "Onboardees"
+                                "role": roleName
 
                                 }
                             }
@@ -176,31 +167,34 @@ let {keys, dropId} = await createDrop({
     }   
 })
 
-    const {contractId: KEYPOM_CONTRACT} = getEnv()
-    let membership = formatLinkdropUrl({
-        customURL: "https://wallet.near.org/linkdrop/CONTRACT_ID/SECRET_KEY",
-        secretKeys: keys.secretKeys,
-        contractId: KEYPOM_CONTRACT,
-    })
-    console.log(`
-    
-    For NEW Grifter Members: 
-    
-    ${membership}
-    
+console.log("debug 1 line 183");
+const {contractId: KEYPOM_CONTRACT} = getEnv()
+let membership = formatLinkdropUrl({
+customURL: "https://wallet.near.org/linkdrop/CONTRACT_ID/SECRET_KEY",
+secretKeys: keys.secretKeys,
+contractId: KEYPOM_CONTRACT,
+})
+console.log(`
 
-    `)
-    let output = "You are now part of PizzaDAO, North Africa Blockchain, and OnboardDAO and received a POAP for Global Pizza Day 2023"+ JSON.stringify(membership);
+For NEW PizzaDAO Members: 
 
-      bot.sendMessage(chatID, output);
+${membership}
 
 
+`)
+let output = "You are now part of PizzaDAO, North Africa Blockchain, and OnboardDAO and received a POAP for Global Pizza Day 2023"+ JSON.stringify(membership);
 
-    return keys
+bot.sendMessage(chatID, output);
+
+
+
+return keys
 }
+console.log("before create dao drop");
+
 
 createDAODrop()
 
 module.exports = {
-    createDAODrop
+createDAODrop
 }
