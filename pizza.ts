@@ -1,12 +1,13 @@
 async function createDAODrop() {
     const path = require("path");
 const homedir = require("os").homedir();
+
 const { KeyPair, keyStores, connect, Account } = require("near-api-js");
 var assert = require('assert');
 require('dotenv').config();
 let telegram_public_bot = process.env.TELEGRAM_KEYBOT;
 
-const keypom = require("keypom-js");
+const keypom = require("@keypom/core");
 // const { DEV_CONTRACT } = require("./configurations");
 // const TESTNET_DAO_CONTRACT = "onboard.sputnikv2.testnet";
 // let chatID = process.env.chatID;
@@ -25,6 +26,8 @@ if (isNaN(numberOfKeys)) {
   console.error('Invalid number provided as an argument.');
   process.exit(1);
 }
+const { parseNearAmount } = require("@near-js/utils");
+
 // Use the number in your script
 console.log(`The number of keys to generate is: ${numberOfKeys}.`);
 const TelegramBot = require('node-telegram-bot-api');
@@ -35,7 +38,7 @@ const {
 	initKeypom,
 	getEnv,
 	createDrop,
-    parseNearAmount,
+    // parseNearAmount,
     createNFTSeries,
     formatLinkdropUrl
 } = keypom
