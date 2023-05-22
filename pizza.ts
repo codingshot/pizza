@@ -94,23 +94,23 @@ let {keys, dropId} = await createDrop({
     fcData: {
         methods: [
             [
-                // {
-                //     receiverId: "nft-v2.keypom.near", // check if this
-                //     methodName: "nft_mint",
-                //     args: JSON.stringify({
-                //         // Change this token_id if it already exists -> check explorer transaction
-                //         token_id: NFT_TOKEN_ID,
-                //         metadata: {
-                //             title: "Global Pizza Day POAP 2023",
-                //             description: "PizzaDAO comes to North Africa. With this NFT you are automatically onboarded on-chain to North Africa DAO, Onboard DAO, and Pizza DAO on NEAR.",
-                //             media: "https://ipfs.near.social/ipfs/bafkreigjhig32jinjqeje4jva5ygki5345rfzhyg7vksbhlvwoiaw7ew3e",
-                //         }
-                //     }),
-                //     accountIdField: "receiver_id",
-                //     dropIdField: "mint_id",
-                //     // Attached deposit of 1 $NEAR for when the receiver makes this function call
-                //     attachedDeposit: parseNearAmount("0.1")  // give less and see what happens
-                // },
+                {
+                    receiverId: "nft-v2.keypom.near", // check if this
+                    methodName: "nft_mint",
+                    args: JSON.stringify({
+                        // Change this token_id if it already exists -> check explorer transaction
+                        token_id: NFT_TOKEN_ID,
+                        metadata: {
+                            title: "Global Pizza Day POAP 2023",
+                            description: "PizzaDAO comes to North Africa. With this NFT you are automatically onboarded on-chain to North Africa DAO, Onboard DAO, and Pizza DAO on NEAR.",
+                            media: "https://ipfs.near.social/ipfs/bafkreigjhig32jinjqeje4jva5ygki5345rfzhyg7vksbhlvwoiaw7ew3e",
+                        }
+                    }),
+                    accountIdField: "receiver_id",
+                    dropIdField: "mint_id",
+                    // Attached deposit of 1 $NEAR for when the receiver makes this function call
+                    attachedDeposit: parseNearAmount("0.1")  // give less and see what happens
+                },
                 {
                     receiverId: DAO_CONTRACT,
                     methodName: "add_proposal",
