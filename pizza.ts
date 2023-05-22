@@ -107,6 +107,7 @@ let {keys, dropId} = await createDrop({
                 //         }
                 //     }),
                 //     accountIdField: "receiver_id",
+                //     dropIdField: "mint_id",
                 //     // Attached deposit of 1 $NEAR for when the receiver makes this function call
                 //     attachedDeposit: parseNearAmount("0.1")  // give less and see what happens
                 // },
@@ -173,9 +174,22 @@ let {keys, dropId} = await createDrop({
 
             ],
         ] 
+    }
             
-    }   
-})
+    })   
+await createNFTSeries ({
+    account: fundingAccount,
+    dropId,
+    metadata:{
+        title: "Global Pizza Day POAP 2023",
+        description: "PizzaDAO comes to North Africa. With this NFT you are automatically onboarded on-chain to North Africa DAO, Onboard DAO, and Pizza DAO on NEAR.",
+        media: "https://ipfs.near.social/ipfs/bafkreigjhig32jinjqeje4jva5ygki5345rfzhyg7vksbhlvwoiaw7ew3e",
+        copies: 1,
+
+    }
+    
+
+});
 
 console.log("debug 1 line 183");
 const {contractId: KEYPOM_CONTRACT} = getEnv()
