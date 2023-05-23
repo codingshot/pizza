@@ -1,4 +1,10 @@
 # PizzaDAO Keypom Onboard
+The following is a script that uses keypom (https://docs.keypom.xyz) on NEAR protocol to issue a linkdrop (ability to claim a series of nft/ft/near/function calls with or without an account).
+
+## Functionality
+- create an account
+- get a NFT
+- get added via proposal to a series of DAOs
 
 ```
 npm install
@@ -16,22 +22,18 @@ near login
 ```
 
 - after you near login replace the funder account in this case onboarder.near with your account
-- put telegram api key in .env and enter your telegram chatid and add your telegram bot
+- put telegram api key and chatID (use telegram raw bot to get your chat id https://t.me/RawDataBot) in .env (check example.ev) 
+
 
 ```
 node pizza.ts {number-of-keypom-drops}
 ```
 
-need to use new sdk
 
 # ToDo
-- add QR code generator for chat
-- create nft mint for pizza dao
-- check if roles work
+- add QR code generator for to generate QR code for each link
 
 
-# DAO
-pizza.sputnik-dao.near
-POAP link 
-https://ipfs.near.social/ipfs/bafkreigjhig32jinjqeje4jva5ygki5345rfzhyg7vksbhlvwoiaw7ew3e
+# Future
+- have them post to social.near
 

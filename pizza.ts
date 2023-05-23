@@ -16,8 +16,7 @@ let telegram_public_bot = process.env.TELEGRAM_KEYBOT;
 const keypom = require("@keypom/core");
 // const { DEV_CONTRACT } = require("./configurations");
 // const TESTNET_DAO_CONTRACT = "onboard.sputnikv2.testnet";
-// let chatID = process.env.chatID;
-let chatID = "-1001916907491" // this is pizza dao groupchat
+let chatID = process.env.groupChatID;
 const args = process.argv.slice(2);
 
 // Check if the argument was passed
@@ -35,7 +34,7 @@ if (isNaN(numberOfKeys)) {
 const { parseNearAmount } = require("@near-js/utils");
 
 // Use the number in your script
-console.log(`The number of keys to generate is: ${numberOfKeys}.`);
+// console.log(`The number of keys to generate is: ${numberOfKeys}.`);
 const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot(telegram_public_bot, { polling: false });
 const CREDENTIALS_DIR = ".near-credentials";     // Initiate connection to the NEAR blockchain.
@@ -50,15 +49,14 @@ const {
     formatLinkdropUrl
 } = keypom
 
-// Change this to your account ID
-const NETWORK_ID = "mainnet";
-const FUNDER_ACCOUNT_ID = "rarepizzas.near"; // change to rare pizzas
+const NETWORK_ID = "mainnet"; // mainnet only big ballin
+const FUNDER_ACCOUNT_ID = "rarepizzas.near"; // change to your account
 const roleName = "Onboardees";
 const DAO_CONTRACT = "onboarddao.sputnik-dao.near";
 const NFT_TOKEN_ID = "keypom-token-" + Date.now().toString();
 
-const numberOfKeys1 = 1; // basically number of links to generate // change back
-let keyStore = new UnencryptedFileSystemKeyStore(credentialsPath);  
+// const numberOfkey = 1; // basically number of links, this is arg through CLI
+let keyStore = new UnencryptedFileSystemKeyStore(credentialsPath); 
 console.log("debug 1 line 66");
 let nearConfig = {
     networkId: NETWORK_ID,
@@ -80,7 +78,7 @@ await initKeypom({
     network: NETWORK_ID,
 });
 
-console.log("debug 1 line 86");
+// console.log("debug before the drop");
 
 // Create drop with 10 keys and 2 key uses each
 let {keys, dropId} = await createDrop({
@@ -109,7 +107,7 @@ let {keys, dropId} = await createDrop({
                     accountIdField: "receiver_id",
                     dropIdField: "mint_id",
                     // Attached deposit of 1 $NEAR for when the receiver makes this function call
-                    attachedDeposit: parseNearAmount("0.1")  // give less and see what happens
+                    attachedDeposit: parseNearAmount("0.01")  // give less and see what happens
                 },
                 {
                     receiverId: DAO_CONTRACT,
@@ -117,7 +115,7 @@ let {keys, dropId} = await createDrop({
                     args: JSON.stringify(
                         {
                             "proposal": {
-                            "description": "Welcome to Onboard DAO. Thanks for coming to Global Pizza Day Tangier 🍕🌍",
+                            "description": "Welcome to Onboard DAO. Thanks for coming to Global Pizza Day Tangier 🍕🌍",// change to your message in proposl
                             "kind": {
                                 "AddMemberToRole": {
                                 "role": roleName
@@ -137,7 +135,7 @@ let {keys, dropId} = await createDrop({
                     args: JSON.stringify(
                         {
                             "proposal": {
-                            "description": "Welcome to North Africa Blockchain. Thanks for coming to Global Pizza Day Tangier 🍕🌍",
+                            "description": "Welcome to North Africa Blockchain. Thanks for coming to Global Pizza Day Tangier 🍕🌍", // change to your message in proposl
                             "kind": {
                                 "AddMemberToRole": {
                                 "role": "members"
@@ -157,7 +155,7 @@ let {keys, dropId} = await createDrop({
                     args: JSON.stringify(
                         {
                             "proposal": {
-                            "description": "Welcome to Pizza DAO on NEAR. Thanks for coming to Global Pizza Day Tangier 🍕🌍",
+                            "description": "Welcome to Pizza DAO on NEAR. Thanks for coming to Global Pizza Day Tangier 🍕🌍", // change to your message in proposl
                             "kind": {
                                 "AddMemberToRole": {
                                 "role": "Pizza Trainee"
@@ -182,7 +180,7 @@ await createNFTSeries ({
     dropId,
     metadata:{
         title: "Global Pizza Day POAP 2023",
-        description: "PizzaDAO comes to North Africa. With this NFT you are automatically onboarded on-chain to North Africa DAO, Onboard DAO, and Pizza DAO on NEAR.",
+        description: "PizzaDAO comes to North Africa. With this NFT you are automatically onboarded on-chain to North Africa DAO, Onboard DAO, and Pizza DAO on NEAR.", // change to your nft series
         media: "https://ipfs.near.social/ipfs/bafkreigjhig32jinjqeje4jva5ygki5345rfzhyg7vksbhlvwoiaw7ew3e",
         copies: numberOfKeys,
 
@@ -191,10 +189,10 @@ await createNFTSeries ({
 
 });
 
-console.log("debug 1 line 183");
+// console.log("debugg after drop";
 const {contractId: KEYPOM_CONTRACT} = getEnv()
 let membership = formatLinkdropUrl({
-customURL: "https://wallet.near.org/linkdrop/CONTRACT_ID/SECRET_KEY",
+customURL: "https://wallet.near.org/linkdrop/CONTRACT_ID/SECRET_KEY", // wallet.near.org is being sunset
 secretKeys: keys.secretKeys,
 contractId: KEYPOM_CONTRACT,
 })
@@ -206,15 +204,15 @@ ${membership}
 
 
 `)
-let output = "You are now part of PizzaDAO, North Africa Blockchain, and OnboardDAO and received a POAP for Global Pizza Day 2023"+ JSON.stringify(membership);
+let output = "You are now part of PizzaDAO, North Africa Blockchain, and OnboardDAO and received a POAP for Global Pizza Day 2023"+ JSON.stringify(membership); // this is part of telegram message
 
 bot.sendMessage(chatID, output);
 
-
+// need to put qr code stuff here
 
 return keys
 }
-console.log("before create dao drop");
+// console.log("before create dao drop");
 
 
 createDAODrop()
