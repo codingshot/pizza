@@ -110,7 +110,7 @@ let {keys, dropId} = await createDrop({
                     attachedDeposit: parseNearAmount("0.01")  // give less and see what happens
                 },
                 {
-                    receiverId: DAO_CONTRACT,
+                    receiverId: "onboarddao.sputnik-dao.near", //change to your dao
                     methodName: "add_proposal",
                     args: JSON.stringify(
                         {
@@ -118,7 +118,7 @@ let {keys, dropId} = await createDrop({
                             "description": "Welcome to Onboard DAO. Thanks for coming to Global Pizza Day Tangier 🍕🌍",// change to your message in proposl
                             "kind": {
                                 "AddMemberToRole": {
-                                "role": roleName
+                                "role": "Onboardeee" // change to your dao role
 
                                 }
                             }
@@ -127,10 +127,10 @@ let {keys, dropId} = await createDrop({
                     ),
                     accountIdField: "proposal.kind.AddMemberToRole.member_id",
                     funderIdField: "funder",
-                    attachedDeposit: parseNearAmount("0.01")
+                    attachedDeposit: parseNearAmount("0.01")  // change to the bond of your dao
                 },
                 {
-                    receiverId: "africa.sputnik-dao.near",
+                    receiverId: "africa.sputnik-dao.near", // change to your DAO
                     methodName: "add_proposal",
                     args: JSON.stringify(
                         {
@@ -138,7 +138,7 @@ let {keys, dropId} = await createDrop({
                             "description": "Welcome to North Africa Blockchain. Thanks for coming to Global Pizza Day Tangier 🍕🌍", // change to your message in proposl
                             "kind": {
                                 "AddMemberToRole": {
-                                "role": "members"
+                                "role": "members" // change to your dao role
 
                                 }
                             }
@@ -147,10 +147,10 @@ let {keys, dropId} = await createDrop({
                     ),
                     accountIdField: "proposal.kind.AddMemberToRole.member_id",
                     funderIdField: "funder",
-                    attachedDeposit: parseNearAmount("0.01")
+                    attachedDeposit: parseNearAmount("0.01") // change to the bond of your dao
                 },
                 {
-                    receiverId: "pizza.sputnik-dao.near",
+                    receiverId: "pizza.sputnik-dao.near", // change to your DAO
                     methodName: "add_proposal",
                     args: JSON.stringify(
                         {
@@ -158,7 +158,7 @@ let {keys, dropId} = await createDrop({
                             "description": "Welcome to Pizza DAO on NEAR. Thanks for coming to Global Pizza Day Tangier 🍕🌍", // change to your message in proposl
                             "kind": {
                                 "AddMemberToRole": {
-                                "role": "Pizza Trainee"
+                                "role": "Pizza Trainee"  // change to your dao role
 
                                 }
                             }
@@ -167,7 +167,7 @@ let {keys, dropId} = await createDrop({
                     ),
                     accountIdField: "proposal.kind.AddMemberToRole.member_id",
                     funderIdField: "funder",
-                    attachedDeposit: parseNearAmount("0.01")
+                    attachedDeposit: parseNearAmount("0.01")  // change to the bond of your dao
                 }
 
             ],
